@@ -1,8 +1,8 @@
+    
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 15 10:16:32 2019
+@author: jding12
 
-@author: y-din
 """
 
 # Prepare the dataset
@@ -34,34 +34,23 @@ X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
 #==============================================================================
 # Set up environment
 #==============================================================================
-# Load scikit's random forest classifier library
+from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-
-# Load scikit's support vector machine library
+from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
-
-# Load pandas
 import pandas as pd
-
-# Load numpy
 import numpy as np
 
 # Set random seed
 np.random.seed(0)
 
-# Load scikit's grid search cross validation library
-from sklearn.model_selection import GridSearchCV
-
-# Import accuracy score library
-from sklearn.metrics import accuracy_score
-
+#==============================================================================
+# Perform a 3-fold grid search and train the Random Forest Classifier
+#==============================================================================
 # Set grid search parameters
 param_grid = [{'n_estimators': [3, 10, 30], 'max_features': [100, 300, 784]}]
 rfc = RandomForestClassifier()
 
-#==============================================================================
-# Perform a 3-fold grid search and train the Random Forest Classifier
-#==============================================================================
 # Train rfc model across 3 folds
 grid_search = GridSearchCV(rfc, param_grid, cv = 3)
 grid_search.fit(X_train, y_train)
@@ -104,5 +93,4 @@ svm_trained = SVC(C=1.0, gamma = 0.01, kernel='poly', probability=False)
 svm_trained.fit(std_X_train[10000:], y_train[10000:])
 
 # Test trained model and calculate accuracy
-y_pred2 = svm_trained.predict(X_test)
-print(\"Accuracy of the support vector classifier is: \", svm_trained.score(std_X_test, y_test))
+print("Accuracy of the support vector classifier is: ", svm_trained.score(std_X_test, y_test))
